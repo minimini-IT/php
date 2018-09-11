@@ -1,0 +1,9 @@
+auto_incrementの初期化
+ alter table テーブル名 auto_increment = 1;
+auto_incrementの設定確認
+ show variables like " %auto_inc%";
+  auto_increment_increment -> 更新する値
+  auto_increment_offset -> 最初にinsertした時に採番される値
+現在のauto_incrementの値の確認
+ show table status like "テーブル名%"\G -> auto_incrementの部分
+ select auto_increment from information_schema.tables where table_name = "テーブル名";
