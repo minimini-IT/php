@@ -47,8 +47,8 @@
 /*  ファイルアップロード関数    */
 function upload_files(){
   if (is_uploaded_file($_FILES["uploadfile"]["tmp_name"])){
-    if (move_uploaded_file($_FILES["uploadfile"]["tmp_name"], "/var/www/html/files/" . $_FILES["uploadfile"]["name"])){
-      chmod("files/" . $FILES["uploadfile"]["name"], 0755);
+    if (move_uploaded_file($_FILES["uploadfile"]["tmp_name"], "/var/www/html/files/question_file/" . $_FILES["uploadfile"]["name"])){
+      chmod("files/question_file/" . $FILES["uploadfile"]["name"], 0755);
     }else{
       echo "ファイルをアップロードできませんでした。";
     }

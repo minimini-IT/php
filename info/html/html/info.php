@@ -26,6 +26,7 @@ while($row = $stmh -> fetch(pdo::FETCH_ASSOC)){
   <label><?=htmlspecialchars($row["time"])?></label>
   <p><?=htmlspecialchars($row["name"])?>より</p></br>
   <p><?=htmlspecialchars($row["explanation"])?></p>
+  <a href="files/menu_file/<?=htmlspecialchars($row['file'])?>"><?=htmlspecialchars($row['file'])?></a>
 <?php
 }
 $pdo = null;

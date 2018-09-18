@@ -2,24 +2,25 @@
 <html>
 <head lang="ja">
   <meta charset="utf-8">
-  <title>javascript -> php</title>
-  <script src="./jquery-3.3.1.min.js"></script>
+  <title>php mysql</title>
 </head>
 <body>
 <?php
-$exercise = ($_POST["exercise"]);
-if ($exercise == 0){
-?>
-<p id="exercise_start">演習開始</p>
-<?php
-print($exercise);
-}elseif ($exercise == 1){
-?>
-<p>演習中</p>
-<p id="exercise_end">演習終了</p>
-<?php
+require_once("mydb.php");
+$pdo = db_connect();
+$sql = "select * from menu where id = 1";
+$stmh = $pdo -> prepare($sql);
+$stmh -> execute();
+while($row = $stmh -> fetch(pdo::FETCH_ASSOC)){
+  if ($row["name"] == null){
+    echo "null";
+  }elseif ($row["name"] == ""){
+    echo "ダブルクォーテーション";
+  }else{
+    echo "そのた";
+  }
 }
+$pdo = null;
 ?>
-<script type="text/javascript" src="./jstest.js"></script>
 </body>
 </html>

@@ -13,12 +13,71 @@ if (isset($_GET["name_search"])){
   $name_search = "";
   $name_search_value ="";
 }
+//ファイルアップロード関数
+function upload_files(){
+  if (is_uploaded_file($_FILES["uploadfile"]["tmp_name"])){
+    if (move_uploaded_file($_FILES["uploadfile"]["tmp_name"], "/var/www/html/files/menu_file/" . $_FILES["uploadfile"]["name"])){
+      chmod("files/menu_file/" . $FILES["uploadfile"]["name"], 0755);
+    }else{
+      echo "ファイルをアップロードできませんでした。";
+    }
+  }
+}
+//データベース接続
+require_once("mydb.php");
+$pdo = db_connect();
+
+//データベース挿入
+if (isset($_POST["action"]) && $_POST["action"] == "insert"){
+  try{
+    $pdo -> beginTransaction();
+    $sql = "insert into menu(title, name, explanation, time, file)values(:title, :name, :explanation, :time, :file)";
+    $stmh = $pdo -> prepare($sql);
+    $stmh -> bindValue(":title", $_POST["title"], pdo::PARAM_STR);
+    $stmh -> bindValue(":name", $_POST["name"], pdo::PARAM_STR);
+    $stmh -> bindValue(":explanation", $_POST["explanation"], pdo::PARAM_STR);
+    $stmh -> bindValue(":file", $_FILES["uploadfile"]["name"], pdo::PARAM_STR);
+    $date = date("Y-m-d", time());
+    $stmh -> bindValue(":time", $date, pdo::PARAM_STR);
+    $stmh -> execute();
+    upload_files();
+    $pdo -> commit();
+  }catch(PDOException $Exception){
+    $pdo -> rollBack();
+    echo "エラー：" . $Exception -> getMessage();
+  }
+}
+//データベース編集
+if (isset($_POST["action"]) && $_POST["action"] == "update"){
+  try{
+    $pdo -> beginTransaction();
+    $sql = "update menu set title = :title, name = :name, explanation = :explanation, file = :file where id = :id";
+    $stmh = $pdo -> prepare($sql);
+    $stmh -> bindValue(":title", $_POST["title"], pdo::PARAM_STR);
+    $stmh -> bindValue(":name", $_POST["name"], pdo::PARAM_STR);
+    $stmh -> bindValue(":explanation", $_POST["explanation"], pdo::PARAM_STR);
+    $stmh -> bindValue(":file", $_FILES["uploadfile"]["name"], pdo::PARAM_STR);
+
+    //  お知らせ編集機能
+    //  ファイルをそのままDBに挿入すると上書きされるかな？
+    //    確認・対策・追加ってできるかな？
+    //  update_indo.phpで各お知らせ記事に対するファイルを削除するかどうか聞いたので、
+    //    削除するならファイルの削除をする
+    //    ファイル追加するならする
+
+
+
+    $date = date("Y-m-d", time());
+    $stmh -> bindValue(":time", $date, pdo::PARAM_STR);
+    $stmh -> execute();
+    upload_files();
+    $pdo -> commit();
+  }catch(PDOException $Exception){
+    $pdo -> rollBack();
+    echo "エラー：" . $Exception -> getMessage();
+  }
+}
 ?>
-
-
-
-
-
 <!DOCTYPE html>
 <html>
 <head lang="ja">
@@ -52,11 +111,9 @@ if (isset($_GET["name_search"])){
           <th>編集</th>
           <th>削除</th>
         </tr>
-        <!-- データベースにあるだけループで取得 -->
+<!-- データベースにあるだけループで取得 -->
 <?php
-require_once("mydb.php");
 $i = 1;
-$pdo = db_connect();
 $sql = "select id, title, name, time from menu where title like '%$title_search%' and name like '%$name_search%' order by id";
 $stmh = $pdo -> prepare($sql);
 $stmh -> execute();

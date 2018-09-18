@@ -1,0 +1,1 @@
+2018-08-23T15:53:48.196998Z 1 [Note] A temporary password is generated for root@localhost: FsgU8gSh&VHH
