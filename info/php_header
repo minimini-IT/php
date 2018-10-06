@@ -1,0 +1,11 @@
+header()
+HTTPヘッダー情報を送信する
+デフォルト：Content-type: text/html
+ -> header("Content-type: text/html")  て感じ
+文字コードも送信できる
+header("Content-type: text/html; charset=UTF-8") 
+
+Content-Disposition
+ メッセージの内容を添付ファイルか、Inlineデータかを提唱する
+  Inline：メッセージを表示するときに、この内容も即座に表示すべきであることを意味する   ？？？？？？
+  attachment：付属物 
