@@ -1,0 +1,10 @@
+#exercise_form{
+  display: none;
+  width: 500px;
+  height:300px;
+  margin: 0;
+  padding: 0;
+  background-color: #FAF0E6;
+  z-index: 2;
+  position: fixed;
+}

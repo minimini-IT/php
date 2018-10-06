@@ -1,0 +1,21 @@
+ntpclientとしてchronyを利用
+ntpdがあれば競合しないように停止
+systemctl stop ntpd.service
+systemctl disable ntpd.service
+
+chrony確認してなければインストール
+yum list installed | grep chrony
+yum install chrony
+
+etc/chrony.confを編集
+server ~~~を全部コメントアウト
+その下に下記を追加
+server ntp.nict.jp iburst
+port 0
+
+※上記の「port 0」は、ntp clientとして動作させるためportオプションを付与してポートを閉じる
+
+再起動 or 起動
+systemctl restart chronyd.service  or  systemctl start chronyd.service
+自動起動設定
+systemctl enable chronyd.service

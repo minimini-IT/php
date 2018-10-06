@@ -1,0 +1,92 @@
+html{
+  background: #E0FFFF;
+}
+
+body{
+  padding: 10px;
+}
+
+header{
+  width: 100%;
+  background: #FF4F50;
+  text-align: center;
+  font-size: 40px;
+  padding: 10px;
+}
+
+.side_menu{
+  text-align: left;
+  background: silver;
+  border: solid 3px;
+  display: inline-table;
+  width: 15%;
+  margin-left: 100px;
+  margin-top: 50px;
+}
+
+.menu{
+  text-align: center;
+}
+
+li{
+  padding: 5px;
+}
+
+#exercise{
+  margin: 0px;
+  cursor: pointer;
+}
+
+.main_menu{
+  text-align: center;
+  display: inline-table;
+  width: 70%;
+  margin-left: 100px;
+}
+
+#exercise_menu, #exercise_form{
+  width: 500px;
+  height:300px;
+  margin: 0;
+  padding: 0;
+  background-color: #FAF0E6;
+  z-index: 2;
+  position: fixed;
+}
+
+#exercise_back{
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.exercise, #exercise_menu, #exercise_form{
+  display: none;
+}
+
+.exercise_now{
+  display: block;
+}
+
+.exercise_menu{
+  cursor: pointer;
+}
+
+table{
+  border: 1px solid black;
+  border-collapse: collapse;
+  word-wrap: break-word;
+  width: 75%;
+}
+
+td, th{
+  border: 1px solid black;
+  padding: 5px;
+  text-align: center;
+}
+
+#back{
+  cursor: pointer;
+  padding-left: 20px;
+}
