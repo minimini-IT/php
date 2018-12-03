@@ -44,7 +44,7 @@ li{
   margin-left: 100px;
 }
 
-#exercise_menu, #exercise_form{
+#exercise_menu, #exercise_form, #confirmation, #exercise_questions_select, #end_exercise_form{
   width: 500px;
   height:300px;
   margin: 0;
@@ -61,7 +61,7 @@ li{
   z-index: 1;
 }
 
-.exercise, #exercise_menu, #exercise_form{
+.exercise, #exercise_menu, #exercise_form, #confirmation, #exercise_questions_select, #end_exercise_form{
   display: none;
 }
 
@@ -69,7 +69,7 @@ li{
   display: block;
 }
 
-.exercise_menu{
+.exercise_menu, #end_exercise, #end_exercise_no{
   cursor: pointer;
 }
 

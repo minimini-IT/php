@@ -12,5 +12,22 @@ $(function(){
   $("#back").click(function(){
     $("#exercise_form").fadeOut();
   });
+  $("#exercise_question_create").click(function(){
+    $("#exercise_menu").fadeOut();
+    $("#confirmation").fadeIn();
+  });
+  $("#confirmation_yes").click(function(){
+    $("#confirmation").fadeOut();
+    $("#exercise_questions_select").fadeIn();
+  });
+  $("#end_exercise").click(function(){
+    $("#end_exercise_form").fadeIn();
+  });
+  $("#end_exercise_no").click(function(){
+    $("#end_exercise_form").fadeOut();
+  });
+  $("#exercise_on").click(function(){
+    $("#exercise_form").fadeIn();
+  });
 });
 

@@ -46,8 +46,9 @@ if (isset($_GET["mark_search"])){
 //ファイルアップロード関数
 function upload_files(){
   for ($i = 0; $i < count($_FILES["uploadfile"]["tmp_name"]); $i++){
-    if (move_uploaded_file($_FILES["uploadfile"]["tmp_name"][$i], "/var/www/html/files/question_file/" . $_FILES["uploadfile"]["name"][$i])){
-      chmod("files/question_file/" . $_FILES["uploadfile"]["name"][$i], 0755);
+    //if (move_uploaded_file($_FILES["uploadfile"]["tmp_name"][$i], "/var/www/html/files/question_file/" . $_FILES["uploadfile"]["name"][$i])){
+    if (move_uploaded_file($_FILES["uploadfile"]["tmp_name"][$i], "/var/download/" . $_FILES["uploadfile"]["name"][$i])){
+      chmod("/var/download/" . $_FILES["uploadfile"]["name"][$i], 0755);
       //挿入したデータのid取得
       require_once("mydb.php");
       $pdo = db_connect();
@@ -154,7 +155,7 @@ if (isset($_POST["action"]) && $_POST["action"] == "update"){
         $stmh -> bindValue(":name", $_POST["file_delete"][$i], PDO::PARAM_STR);
         $stmh -> execute();
         $pdo -> commit();
-        unlink("/var/www/html/files/question_file/".$_POST["file_delete"][$i]);
+        unlink("/var/download/".$_POST["file_delete"][$i]);
       }catch(pdoException $Exception){
         $pdo -> rollBack();
         print "イベントエラー" .$Exception -> getMessage();
@@ -175,9 +176,33 @@ if (isset($_POST["action"]) && $_POST["action"] == "update"){
   <div id="exercise_back">
     <div id="exercise_menu">
       <h2>どちらの問題を作成しますか？</h2>
-      <label class="exercise_menu"><a href="create_question_exercise.html">演習問題</a></label>
+      <!--<label class="exercise_menu"><a href="create_question_exercise.html">演習問題</a></label>-->
+      <label class="exercise_menu" id="exercise_question_create">演習問題</label>
       <label class="exercise_menu"><a href="create_question.html">練習問題</a></label>
       <label class="exercise_menu" id="no">作成しない</label>
+    </div>
+    <div id="confirmation">
+      <h2>既存の問題集に追加しますか？</h2>
+      <label class="exercise_menu" id="confirmation_yes">はい</label>
+      <label class="exercise_menu" id="confirmation_no">いいえ</label>
+    </div>
+    <div id="exercise_questions_select">
+      <h2>問題集を選択してください</h2>
+      <form method="post" action="create_question_exercise.php"> 
+        <select name="title">
+<?php
+$sql = "select title from exercise";
+$stmh = $pdo -> prepare($sql);
+$stmh -> execute();
+while($row = $stmh -> fetch(pdo::FETCH_ASSOC)){
+?>
+          <option value="<?=htmlspecialchars($row['title'])?>"><?=htmlspecialchars($row['title'])?></option>
+<?php
+}
+?>
+        </select>
+        <input type="submit" value="送信">
+      </form>
     </div>
   </div>
   <div class="side_menu">
@@ -208,6 +233,7 @@ if (isset($_POST["action"]) && $_POST["action"] == "update"){
       <input type="submit" value="検索">
     </ul>
     </form>
+    <a href="questions.php">検索結果を戻す</a>
   </div>
   <h2>問題一覧</h2>
   <table>
@@ -218,13 +244,12 @@ if (isset($_POST["action"]) && $_POST["action"] == "update"){
         <th>作成者</th>
         <th>種類</th>
         <th>点数</th>
-        <th>挑戦</th>
         <th>編集</th>
         <th>削除</th>
       </tr>
     <!-- 以下ループでテーブルにあるだけ表示 -->
 <?php
-$sql = "select q_id, title, name, category, mark from question where title like '%$title_search%' and category like '%$category_search%' and mark like '%$mark_search%' and questions = '' order by q_id";
+$sql = "select q_id, title, name, category, mark from question where title like '%$title_search%' and category like '%$category_search%' and mark like '%$mark_search%' and questions is null order by q_id";
 $stmh = $pdo -> prepare($sql);
 $stmh -> execute();
 $i = 1;
@@ -232,11 +257,10 @@ while($row = $stmh -> fetch(pdo::FETCH_ASSOC)){
 ?>
 <tr>
     <td><?=$i++?></td>
-    <td><?=htmlspecialchars($row["title"])?></td>
+    <td><a href="question.php?id=<?=htmlspecialchars($row['q_id'])?>" target="_blank"><?=htmlspecialchars($row["title"])?></a>
     <td><?=htmlspecialchars($row["name"])?></td>
     <td><?=htmlspecialchars($row["category"])?></td>
     <td><?=htmlspecialchars($row["mark"])?></td>
-    <td><a href="question.php?id=<?=htmlspecialchars($row['q_id'])?>" target="_blank">挑戦</a></td>
     <td><a href="update_question.php?id=<?=htmlspecialchars($row['q_id'])?>">編集</a></td>
     <td><a onclick="return confirm('<?=htmlspecialchars($row['title'])?>を削除してもよろしいですか？')"; href="questions.php?action=delete&ID=<?=htmlspecialchars($row['q_id'])?>">削除</a></td>
 </tr>    

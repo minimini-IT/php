@@ -19,7 +19,7 @@ if (isset($_GET["name_search"])){
 function upload_files(){
   for ($i = 0; $i < count($_FILES["uploadfile"]["tmp_name"]); $i++){
     if (move_uploaded_file($_FILES["uploadfile"]["tmp_name"][$i], "/var/www/html/files/menu_file/" . $_FILES["uploadfile"]["name"][$i])){
-      chmod("files/menu_file/" . $_FILES["uploadfile"]["name"][$i], 0755);
+      chmod("/var/www/html/files/menu_file/" . $_FILES["uploadfile"]["name"][$i], 0755);
       //挿入したデータのid取得
       require_once("mydb.php");
       $pdo = db_connect();
@@ -159,7 +159,6 @@ if (isset($_POST["action"]) && $_POST["action"] == "update"){
           <th>タイトル</th>
           <th>作成者</th>
           <th>日時</th>
-          <th>詳細</th>
           <th>編集</th>
           <th>削除</th>
         </tr>
@@ -172,10 +171,9 @@ $stmh -> execute();
 while($row = $stmh -> fetch(pdo::FETCH_ASSOC)){
 ?>
           <td><?=$i++?></td>
-          <td><?=htmlspecialchars($row["title"])?></td>
+          <td><a href="info.php?id=<?=htmlspecialchars($row['id'])?>"><?=htmlspecialchars($row["title"])?></a></td>
           <td><?=htmlspecialchars($row["name"])?></td>
           <td><?=htmlspecialchars($row["time"])?></td>
-          <td><a href="info.php?id=<?=htmlspecialchars($row['id'])?>">詳細</a></td>
           <td><a href="update_info.php?id=<?=htmlspecialchars($row['id'])?>">編集</a></td>
           <td><a onclick="return confirm('<?=htmlspecialchars($row['title'])?>を削除してもよろしいですか？')"; href="index.php?action=delete&ID=<?=htmlspecialchars($row['id'])?>">削除</a></td>
         </tr>

@@ -1,0 +1,35 @@
+Composerの導入
+  php -r "copy('https://getcomposer.org/insetaller', 'composer-setup.php');"
+  php composer-setup.php
+  php -r "unlink('composer-setup.php');"
+  mv composer.phar /usr/local/bin/composer
+
+Cache Liteの導入
+  useradd ユーザ名※root以外いなければ
+  chown ユーザ名:apache -R /var/www
+
+◎ この後の処理はcomposer.jsonが必要
+   上記のコマンドでは作成されなかったので作成する
+    composer init  ※ 対話形式で初期設定する
+      聞かれる項目                        #記入例
+      ・パッケージ名                      #無くて良い（最初から設定あり）
+      ・ディスクリプション（説明）        #適当に説明（よくわからん）
+      ・著作者と連絡先メールアドレス      #名前 <メールアドレス> の形式で記入 n でskip?
+      ・最低限のスタビリティ              #無くて良い
+      ・パッケージタイプ                  #選択肢から選ぶ(projectとか)
+      ・ライセンス                        #よくわからん（MITって書いた）
+      ・依存パッケージを追加              #ここでいれたいパッケージ記入した
+      ・開発環境での依存パッケージを追加  #ここはわからんから無しでやった
+      ・composer.jsonのプレビュー         #確認
+      でcomposer.json完成
+
+cache_liteインストール
+  composer require pear/cache_lite
+    vendor, composer.lok が作成されてる
+
+キャッシュ格納ディレクトリ作成
+  mkdir -p /var/www/Cache/tmp/
+  chmod 777 /var/www/Cache/tmp/
+  chown ユーザ名:apache /var/www/Cache/tmp/
+
+でcache_liteが入った！
